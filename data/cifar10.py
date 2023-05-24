@@ -13,7 +13,8 @@ import torchvision.transforms as transforms
 label_name = ["airplane", "automobile", "bird","cat", "deer", "dog","frog", "horse", "ship", "truck"]
 
 
-DATA_BATCHES = ['data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5']
+# DATA_BATCHES = ['data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5']
+DATA_BATCHES = ['data_batch_1']
 TEST_BATCHES = ['test_batch']
 
 
@@ -33,16 +34,14 @@ class Cifar10(Dataset):
         self.labels = np.concatenate(self.labels, axis=0)
         print(self.imgs.shape, self.labels.shape)
  
-        self.transform = transforms.Compose([transforms.ToTensor()])
         self.N_CLS = 10
 
     def __getitem__(self, index):
         img = self.imgs[index]
-        if self.transform is not None:
-            img = self.transform(img)
+        img = torch.from_numpy(img.astype(np.float32))
         label = self.N_CLS * [0]
         label[self.labels[index]] = 1
-        label = torch.LongTensor(label)
+        label = torch.Tensor(label)
  
         return img, label
  
@@ -52,10 +51,10 @@ class Cifar10(Dataset):
 
 if __name__ == '__main__':
     dataset = Cifar10('D:\\Datasets\\cifar-10-python\\cifar-10-batches-py', train=False)
-    print(dataset.imgs[:3], dataset.labels[:3])
-    data = DataLoader(dataset, batch_size=5)
+    print(dataset.imgs[0].size, dataset.labels[0])
+    data = DataLoader(dataset, batch_size=1)
 
     for epoch in range(1):
         print("Epoch {}".format(epoch))
         for step, (imgs, labels) in enumerate(data):
-            print("step {}: {}".format(step, labels))
+            print("step {}: {}".format(step, imgs[0].size()))
