@@ -49,7 +49,7 @@ class Cifar10(Dataset):
     def __len__(self):
         return len(self.imgs)
 
-
+      
 def binary2img(root, batch, save_cls):
     with open(os.path.join(root, 'cifar-10-batches-py', batch), 'rb') as f:
         img_dict = pickle.load(f, encoding='bytes')
@@ -79,14 +79,14 @@ def binary2img(root, batch, save_cls):
             os.makedirs(save_path)
         pic_name = save_path + f'\\%d.png' % i
         imageio.imwrite(pic_name, img)
-
+  
 
 if __name__ == '__main__':
     root = '..\\dataset\\cifar-10-python'
     for i in range(5):
         binary2img(root, f'data_batch_%d' % (i + 1), 'train')
     binary2img(root, f'test_batch', 'test')
-
+    
     dataset = Cifar10('D:\\Datasets\\cifar-10-python\\cifar-10-batches-py', train=False)
     print(dataset.imgs[0].size, dataset.labels[0])
     data = DataLoader(dataset, batch_size=1)
