@@ -1,7 +1,7 @@
 import os
 import pickle
 import numpy as np
-<<<<<<< HEAD
+import imageio
 from PIL import Image
 
 import torch
@@ -50,19 +50,6 @@ class Cifar10(Dataset):
         return len(self.imgs)
 
 
-if __name__ == '__main__':
-    dataset = Cifar10('D:\\Datasets\\cifar-10-python\\cifar-10-batches-py', train=False)
-    print(dataset.imgs[0].size, dataset.labels[0])
-    data = DataLoader(dataset, batch_size=1)
-
-    for epoch in range(1):
-        print("Epoch {}".format(epoch))
-        for step, (imgs, labels) in enumerate(data):
-            print("step {}: {}".format(step, imgs[0].size()))
-=======
-import imageio
-
-
 def binary2img(root, batch, save_cls):
     with open(os.path.join(root, 'cifar-10-batches-py', batch), 'rb') as f:
         img_dict = pickle.load(f, encoding='bytes')
@@ -99,4 +86,12 @@ if __name__ == '__main__':
     for i in range(5):
         binary2img(root, f'data_batch_%d' % (i + 1), 'train')
     binary2img(root, f'test_batch', 'test')
->>>>>>> 1df0ad8 ([feat](binary2img): finish)
+
+    dataset = Cifar10('D:\\Datasets\\cifar-10-python\\cifar-10-batches-py', train=False)
+    print(dataset.imgs[0].size, dataset.labels[0])
+    data = DataLoader(dataset, batch_size=1)
+
+    for epoch in range(1):
+        print("Epoch {}".format(epoch))
+        for step, (imgs, labels) in enumerate(data):
+            print("step {}: {}".format(step, imgs[0].size()))
