@@ -10,8 +10,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--bench', default='resnet18')
     parser.add_argument('--pretrained', default=False)
-    parser.add_argument('--train_set', default='D:/Datasets/cifar-10-python/cifar-10-batches-py')
-    parser.add_argument('--test_set', default='D:/Datasets/cifar10_clean_500')
+    parser.add_argument('--train_set', default='D:\\大三下课程\\人工智能安全导论\\Cifar10-Adversarial-Competition\\dataset\\cifar-10-python')
+    # parser.add_argument('--test_set', default='D:/Datasets/cifar10_clean_500')
     parser.add_argument('--checkpoint', default=50)
     parser.add_argument('--batch_size', default=24)
     parser.add_argument('--iteration', default=5)
@@ -22,8 +22,8 @@ if __name__ == '__main__':
 
     if not args.pretrained:
         dataset = Cifar10(root=args.train_set, train=True)
-        data = DataLoader(dataset, batch_size=args.batch_size)
-        bench.train(data, save_root='./test_bench/checkpoints')
+        data = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+        bench.train(data, save_root='./test_bench/checkpoints', iteration=args.iteration)
 
     bench.load(os.path.join('./test_bench/checkpoints', args.bench, "epoch{}.pth".format(args.checkpoint)))
 

@@ -1,7 +1,8 @@
 import time
 from tqdm import tqdm, trange
+import torch.nn as nn
 
-from .base_models import BaseModel
+from .base_model import BaseModel
 
 class JacobianModel(BaseModel):
     def __init__(self, black_box: nn.Module, attack_rate: float):
