@@ -1,7 +1,6 @@
 import os
 import pickle
 import numpy as np
-import imageio
 from PIL import Image
 
 import torch
@@ -11,7 +10,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 
 # 类别名
-label_name = ["airplane", "automobile", "bird","cat", "deer", "dog","frog", "horse", "ship", "truck"]
+label_names = ["airplane", "automobile", "bird","cat", "deer", "dog","frog", "horse", "ship", "truck"]
 
 
 # DATA_BATCHES = ['data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5']
@@ -22,32 +21,35 @@ TEST_BATCHES = ['test_batch']
 class Cifar10(Dataset):
     def __init__(self, root: str, train: bool, transform=None):
         super(Cifar10, self).__init__()
-        self.imgs = []
+        self.transforms = transforms.Compose([transforms.ToTensor()])
+        self.paths = []
         self.labels = []
-        batches = DATA_BATCHES if train else TEST_BATCHES
-        for batch in batches:
-            with open(os.path.join(root, batch),'rb') as f:
-                img_dict=pickle.load(f, encoding='bytes')
-                # b'batch_label', b'labels', b'data', b'filenames'
-                self.imgs.append(np.reshape(img_dict[b'data'], (-1, 3, 32, 32)))
-                self.labels.append(img_dict[b'labels'])
-        self.imgs = np.concatenate(self.imgs, axis=0)
-        self.labels = np.concatenate(self.labels, axis=0)
-        print(self.imgs.shape, self.labels.shape)
- 
+
+        for index, label_name in enumerate(label_names):
+            print("=================",label_name,"================")
+            if train:
+                base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
+            else:
+                base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
+            for pic_name in os.listdir(base_path):
+                # print("pic_name：", pic_name, "category", index)
+                self.paths.append(os.path.join(base_path, pic_name))
+                self.labels.append(index)
         self.N_CLS = 10
 
     def __getitem__(self, index):
-        img = self.imgs[index]
-        img = torch.from_numpy(img.astype(np.float32))
+        path = self.paths[index]
+        print(path)
+        img = Image.open(path).convert('RGB')
+        if self.transforms is not None:
+            img = self.transforms(img)
         label = self.N_CLS * [0]
         label[self.labels[index]] = 1
-        label = torch.Tensor(label)
- 
+        label = torch.LongTensor(label)
         return img, label
  
     def __len__(self):
-        return len(self.imgs)
+        return self.N_CLS
 
       
 def binary2img(root, batch, save_cls):
@@ -78,20 +80,17 @@ def binary2img(root, batch, save_cls):
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         pic_name = save_path + f'\\%d.png' % i
-        imageio.imwrite(pic_name, img)
+        Image.imread(pic_name, img)
   
 
 if __name__ == '__main__':
-    root = '..\\dataset\\cifar-10-python'
-    for i in range(5):
-        binary2img(root, f'data_batch_%d' % (i + 1), 'train')
-    binary2img(root, f'test_batch', 'test')
-    
-    dataset = Cifar10('D:\\Datasets\\cifar-10-python\\cifar-10-batches-py', train=False)
-    print(dataset.imgs[0].size, dataset.labels[0])
+    # root = '..\\dataset\\cifar-10-python'
+    root = 'D:\\大三下课程\\人工智能安全导论\\Cifar10-Adversarial-Competition\\dataset\\cifar-10-python'
+    dataset = Cifar10(root, train=True)
+    print(dataset.paths[0], dataset.labels[0])
     data = DataLoader(dataset, batch_size=1)
 
     for epoch in range(1):
         print("Epoch {}".format(epoch))
-        for step, (imgs, labels) in enumerate(data):
-            print("step {}: {}".format(step, imgs[0].size()))
+        for step, (img, label) in enumerate(data):
+            print("step {}: {}".format(step, img.size()))
