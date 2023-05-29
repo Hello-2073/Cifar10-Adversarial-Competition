@@ -39,13 +39,13 @@ class Cifar10(Dataset):
 
     def __getitem__(self, index):
         path = self.paths[index]
-        print(path)
+        # print(path)
         img = Image.open(path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
         label = self.N_CLS * [0]
         label[self.labels[index]] = 1
-        label = torch.LongTensor(label)
+        label = torch.Tensor(label)
         return img, label
  
     def __len__(self):
