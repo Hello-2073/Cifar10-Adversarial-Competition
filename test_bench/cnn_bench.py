@@ -60,7 +60,7 @@ class CnnBench(BaseBench):
                 total_loss += loss.item()
             print("epoch: {}, loss: {}".format(epoch, total_loss))
             
-            if epoch % 5 == 0:
+            if epoch % 1 == 0:
                 self.save(os.path.join(save_root, self.name, 'epoch{}.pth'.format(epoch)))
 
     def test(self, data):
