@@ -30,7 +30,7 @@ class Cifar10(Dataset):
             if train:
                 base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
             else:
-                base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
+                base_path = os.path.join(root, 'cifar-10-output', 'test', label_name)
             for pic_name in os.listdir(base_path):
                 # print("pic_name：", pic_name, "category", index)
                 self.paths.append(os.path.join(base_path, pic_name))

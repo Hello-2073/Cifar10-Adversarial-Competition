@@ -12,7 +12,7 @@ class Cifar10Clean500(Dataset):
     r"""
     Official cifar10_clean_500 dataset.
     """
-    def __init__(self, root):
+    def __init__(self, root, attack_id=0):
         super(Cifar10Clean500, self).__init__()
         self.transforms = transforms.Compose([transforms.ToTensor()])
         self.paths = []
@@ -23,7 +23,10 @@ class Cifar10Clean500(Dataset):
                 content = line.split(' ')
                 filename = content[0]
                 label = content[1]
-                self.paths.append(os.path.join(root, 'images', filename))
+                if attack_id > 0:
+                    self.paths.append(os.path.join(root, 'attack_{}'.format(attack_id), filename))
+                else:
+                    self.paths.append(os.path.join(root, 'images', filename))
                 self.labels.append(int(label))
         self.num_cls = max(self.labels) + 1
 
