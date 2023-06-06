@@ -98,7 +98,7 @@ class CnnBench(BaseBench):
             if preds[i] == labels[i]:
                 acc += 1
         acc /= len(preds)
-        print('Accuracy on test set:%d %%' % (acc))
+        # print('Accuracy on test set:%d %%' % (acc))
         return preds, acc
 
     def save(self, path):
