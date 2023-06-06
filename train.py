@@ -4,7 +4,7 @@ import argparse
 import numpy as np
 from PIL import Image
 import torchvision.transforms as transforms
-
+from torch.utils.data import DataLoader
 from data import Cifar10Clean500
 from model import JacobianModel
 from test_bench import CnnBench
