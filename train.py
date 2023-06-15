@@ -3,6 +3,7 @@ import torch
 import argparse
 import numpy as np
 from PIL import Image
+from tqdm import tqdm, trange
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from data import Cifar10Clean500
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('--bench', default='cnn')
     parser.add_argument('--dataset', default='D:/Datasets/cifar10_clean_500')
     parser.add_argument('--checkpoint', default=115)
-    parser.add_argument('--iteration', default=5)
+    parser.add_argument('--iteration', default=10)
     parser.add_argument('--cuda', default=True)
     args = parser.parse_args()
 
