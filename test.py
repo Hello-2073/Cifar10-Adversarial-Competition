@@ -12,7 +12,7 @@ if __name__ == '__main__':
     parser.add_argument('--bench', default='cnn')
     parser.add_argument('--train_set', default='D:/Datasets/cifar-10-python')
     parser.add_argument('--test_set', default='D:/Datasets/cifar10_clean_500')
-    parser.add_argument('--attack_id', default=0)
+    # parser.add_argument('--attack_id', default=101)
     parser.add_argument('--pretrain', default=0)
     parser.add_argument('--checkpoint', default=115)
     parser.add_argument('--batch_size', default=256)
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     
     bench.load(os.path.join('./test_bench/checkpoints', args.bench, "epoch{}.pth".format(args.checkpoint)))
 
-    dataset = Cifar10Clean500(root=args.test_set, attack_id=3)
+    dataset = Cifar10Clean500(root=args.test_set, attack_id=0)
     data = DataLoader(dataset, batch_size=1)
     preds, confusion_matrix = bench.test(data)
     print("accuracy=", confusion_matrix)
