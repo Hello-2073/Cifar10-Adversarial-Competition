@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 
 # 类别名
-label_names = ["airplane", "automobile", "bird","cat", "deer", "dog","frog", "horse", "ship", "truck"]
+LABEL_NAMES = ["airplane", "automobile", "bird","cat", "deer", "dog","frog", "horse", "ship", "truck"]
 
 
 # DATA_BATCHES = ['data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5']
@@ -25,12 +25,12 @@ class Cifar10(Dataset):
         self.paths = []
         self.labels = []
 
-        for index, label_name in enumerate(label_names):
-            print("=================",label_name,"================")
+        for index, label_name in enumerate(LABEL_NAMES):
+            # print("=================",label_name,"================")
             if train:
                 base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
             else:
-                base_path = os.path.join(root, 'cifar-10-output', 'train', label_name)
+                base_path = os.path.join(root, 'cifar-10-output', 'test', label_name)
             for pic_name in os.listdir(base_path):
                 # print("pic_name：", pic_name, "category", index)
                 self.paths.append(os.path.join(base_path, pic_name))
@@ -39,17 +39,17 @@ class Cifar10(Dataset):
 
     def __getitem__(self, index):
         path = self.paths[index]
-        print(path)
+        # print(path)
         img = Image.open(path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
         label = self.N_CLS * [0]
         label[self.labels[index]] = 1
-        label = torch.LongTensor(label)
+        label = torch.Tensor(label)
         return img, label
  
     def __len__(self):
-        return self.N_CLS
+        return len(self.paths)
 
       
 def binary2img(root, batch, save_cls):
